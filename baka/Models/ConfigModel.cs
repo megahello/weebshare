@@ -32,6 +32,8 @@ namespace baka.Models
         public string S3BucketName { get; set; }
         [J("s3_key_prefix")]
         public string S3KeyPrefix { get; set; }
+        [J("s3_set_public_read")]
+        public bool SetS3Public { get; internal set; }
         [J("preserve_deleted_files")]
         public bool PreserveDeletedFiles { get; set; }
 

@@ -41,6 +41,9 @@ namespace baka
                 request.InputStream = stream;
                 request.ContentType = ContentType;
 
+                if (Config.SetS3Public)
+                    request.CannedACL = S3CannedACL.PublicRead;
+
                 await S3Utility.UploadAsync(request);
 
                 return true;
@@ -64,6 +67,24 @@ namespace baka
             catch
             {
                 return null;
+            }
+        }
+
+        public static async Task<bool> DeleteFile(string FileId)
+        {
+            try
+            {
+                DeleteObjectRequest request = new DeleteObjectRequest();
+                request.BucketName = Config.S3BucketName;
+                request.Key = FileId;
+
+                await S3Client.DeleteObjectAsync(request);
+
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }
