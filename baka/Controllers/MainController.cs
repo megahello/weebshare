@@ -8,8 +8,8 @@ using System.Collections.Generic;
 
 namespace baka.Controllers
 {
-    public class FilesApiController : BakaController
+    public class MainController : BakaController
     {
         
-    }
+    }   
 }

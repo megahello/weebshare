@@ -28,7 +28,7 @@ namespace baka
         {
             services.AddMvc();
 
-           // services.Configure<FormFile>()
+            // services.Configure<FormFile>()
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +50,7 @@ namespace baka
                 await next();
 
                 string header = context.Request.Headers["baka_token"].FirstOrDefault();
-                
+
                 string ip = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault() ?? context.Connection.RemoteIpAddress.ToString();
 
                 var request = new BakaRequest()
@@ -58,7 +58,8 @@ namespace baka
                     DisplayUrl = context.Request.GetDisplayUrl(),
                     AuthHeader = header,
                     RemoteIp = ip,
-                    Timestamp = DateTime.Now.ToFileTimeUtc().ToString()
+                    Timestamp = DateTime.Now.ToFileTimeUtc().ToString(),
+                    Method = context.Request.Method
                 };
 
                 await HttpLoggingService.Log(request);

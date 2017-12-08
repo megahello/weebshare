@@ -60,6 +60,8 @@ namespace baka
         public string AuthHeader { get; set; }
         [J("remote_ip")]
         public string RemoteIp { get; set; }
+        [J("method")]
+        public string Method { get; set; }
         [J("timestamp")]
         public string Timestamp { get; set; }
     }
