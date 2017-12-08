@@ -2,6 +2,6 @@
     "database_name": "main_db",
     "root_token": "my_token",
     "debug": true,
-    "log_interval":10,
+    "log_interval": 500,
     "log_path": "RequestLogs/"
 }
