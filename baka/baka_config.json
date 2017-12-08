@@ -1,7 +1,12 @@
 {
-    "database_name": "main_db",
+    "database_name": "main_db.db",
     "root_token": "my_token",
     "debug": true,
     "log_interval": 500,
-    "log_path": "RequestLogs/"
+    "log_path": "RequestLogs/",
+    "log_requests_to_console": true,
+    "s3_access_key":"",
+    "s3_secret_key":"",
+    "s3_service_url":"",
+    "s3_bucket_name":"baka-main"
 }

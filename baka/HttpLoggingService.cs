@@ -29,7 +29,7 @@ namespace baka
 
             await Task.Run(() =>
             {
-                if (Globals.Config.IsDebug)
+                if (Globals.Config.LogRequestsToConsole)
                     Console.WriteLine(JsonConvert.SerializeObject(request));
                 CheckAndSaveLogs();
             });

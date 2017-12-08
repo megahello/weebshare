@@ -16,6 +16,8 @@ namespace baka.Models
 
         [J("debug")]
         public bool IsDebug { get; set; }
+        [J("log_requests_to_console")]
+        public bool LogRequestsToConsole { get; set; }
         [J("log_interval")]
         public int LogInterval { get; set; }
         [J("log_path")]
