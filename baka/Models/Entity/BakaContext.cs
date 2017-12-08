@@ -9,7 +9,7 @@ namespace baka.Models.Entity
         protected override void OnConfiguring(DbContextOptionsBuilder OptionsBuilder)
         {
             OptionsBuilder.UseSqlite($"Data Source = {Globals.Config.DbName}");
-        } 
+        }
     }
 
     public class BakaUser
@@ -26,7 +26,7 @@ namespace baka.Models.Entity
         public string Token { get; set; }
 
         public string Email { get; set; }
-
+        public string IntialIp { get; set; }
         public double UploadLimitMB { get; set; }
 
     }
@@ -37,6 +37,8 @@ namespace baka.Models.Entity
         public int Id { get; set; }
         public string ExternalId { get; set; }
         public string Filename { get; set; }
+        public string IpUploadedFrom { get; set; }
+        public bool Deleted { get; set; }
         public BakaUser Uploader { get; set; }
         public double FileSizeMB { get; set; }
     }

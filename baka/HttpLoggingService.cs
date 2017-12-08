@@ -40,10 +40,11 @@ namespace baka
             if (request_count > Globals.Config.LogInterval)
             {
                 request_count = default(int);
+                string json_data = JsonConvert.SerializeObject(this);
 
                 using (var writer = new StreamWriter(File.Create(Path.Combine(Globals.Config.LogPath, $"log_{DateTime.Now.ToFileTimeUtc()}.json"))))
                 {
-                    await writer.WriteLineAsync(JsonConvert.SerializeObject(this));
+                    await writer.WriteLineAsync(json_data);
                 }
 
                 Requests.Clear();

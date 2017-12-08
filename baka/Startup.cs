@@ -47,6 +47,8 @@ namespace baka
 
             app.Use(async (context, next) =>
             {
+                await next();
+
                 string header = context.Request.Headers["baka_token"].FirstOrDefault();
                 
                 string ip = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault() ?? context.Connection.RemoteIpAddress.ToString();
@@ -60,8 +62,6 @@ namespace baka
                 };
 
                 await HttpLoggingService.Log(request);
-
-                await next();
             });
 
             app.UseMvc(routes =>
