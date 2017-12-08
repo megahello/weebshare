@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Extensions.Primitives;
 
 namespace baka
 {
@@ -14,9 +16,11 @@ namespace baka
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            HttpLoggingService = new HttpLoggingService();
         }
 
         public IConfiguration Configuration { get; }
+        public HttpLoggingService HttpLoggingService { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -37,6 +41,25 @@ namespace baka
             }
 
             app.UseStaticFiles();
+
+            app.Use(async (context, next) =>
+            {
+                string header = context.Request.Headers["baka_token"].FirstOrDefault();
+                
+                string ip = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault() ?? context.Connection.RemoteIpAddress.ToString();
+
+                var request = new BakaRequest()
+                {
+                    DisplayUrl = context.Request.GetDisplayUrl(),
+                    AuthHeader = header,
+                    RemoteIp = ip,
+                    Timestamp = DateTime.Now.ToFileTimeUtc().ToString()
+                };
+
+                await HttpLoggingService.Log(request);
+
+                await next();
+            });
 
             app.UseMvc(routes =>
             {
