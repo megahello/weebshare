@@ -41,7 +41,7 @@ namespace baka.Controllers
         }
 
         [NonAction]
-        private AuthModel AuthorizeInfo()
+        internal AuthModel AuthorizeInfo()
         {
             AuthModel model = new AuthModel();
 
@@ -70,7 +70,7 @@ namespace baka.Controllers
         }
 
         [NonAction]
-        private AuthModel AuthorizeSu()
+        internal AuthModel AuthorizeSu()
         {
             AuthModel model = new AuthModel();
 

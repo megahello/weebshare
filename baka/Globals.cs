@@ -87,5 +87,15 @@ namespace baka
                 return false;
             }
         }
+
+        public static string GenerateToken()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static string GenerateFileId()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
