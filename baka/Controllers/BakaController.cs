@@ -103,5 +103,11 @@ namespace baka.Controllers
         {
             return new AuthModel() { Authorized = false, User = null, };
         }
+
+        [NonAction]
+        internal string GetIp()
+        {
+            return Request.Headers["CF-Connecting-IP"].FirstOrDefault() ?? Request.HttpContext.Connection.RemoteIpAddress.ToString();
+        }
     }
 }

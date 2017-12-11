@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 
 namespace baka.Models.Entity
@@ -45,7 +46,7 @@ namespace baka.Models.Entity
 
         public string Email { get; set; }
 
-        public string IntialIp { get; set; }
+        public string InitialIp { get; set; }
 
         public double UploadLimitMB { get; set; }
 
@@ -65,6 +66,8 @@ namespace baka.Models.Entity
 
         public string Filename { get; set; }
 
+        public string Extension { get; set; }
+
         public string IpUploadedFrom { get; set; }
 
         public bool Deleted { get; set; }
@@ -74,6 +77,16 @@ namespace baka.Models.Entity
         public DateTime Timestamp { get; set; }
 
         public double FileSizeMB { get; set; }
+
+        public string ContentType
+        {
+            get
+            {
+                return BakaMime.GetMimeType(Extension);
+            }
+        }
+
+
     }
 
     public class BakaLink
@@ -89,7 +102,7 @@ namespace baka.Models.Entity
         public int Id { get; set; }
 
         public BakaUser Uploader { get; set; }
-        
+
         public DateTime Timestamp { get; set; }
     }
 }

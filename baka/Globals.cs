@@ -14,11 +14,17 @@ namespace baka
     public static class Globals
     {
         public const string ConfigFileName = "baka_config.json";
+
         public const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
         public static Random Random = new Random();
+
         public static ConfigModel Config { get; set; }
+
         public static AmazonS3Config S3Config { get; set; }
+
         public static AmazonS3Client S3Client { get; set; }
+        
         public static TransferUtility S3Utility { get; set; }
 
         public static void Initliaze()
@@ -110,6 +116,12 @@ namespace baka
         public static string GenerateFileId()
         {
             return new string(Enumerable.Repeat(chars, Config.IdLength)
+              .Select(s => s[Random.Next(s.Length)]).ToArray());
+        }
+
+        public static string GenerateBackendId()
+        {
+            return new string(Enumerable.Repeat(chars, Config.IdLength * 2)
               .Select(s => s[Random.Next(s.Length)]).ToArray());
         }
 

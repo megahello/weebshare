@@ -27,7 +27,7 @@ namespace baka.Controllers
             {
                 var file = await context.Files.FirstOrDefaultAsync(u => u.ExternalId == name);
 
-                if (file == null)
+                if (file == null || file.Deleted)
                 {
                     IActionResult link = await GetLink(name, ext, url);
 
