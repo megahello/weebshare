@@ -57,7 +57,7 @@ namespace baka.Controllers
 
                 if (usr.Disabled || usr.Deleted)
                     model.Authorized = false;
-                else if (!usr.Permissions.Contains("SU_VIEW_ACCOUNT_INFO"))
+                else if (!usr.Permissions.Contains("SU_VIEW_USER_INFO"))
                 {
                     model.Authorized = false;
                 }

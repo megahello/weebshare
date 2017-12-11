@@ -8,6 +8,7 @@ using Amazon.S3.Transfer;
 using Jose;
 using baka.Models.Entity;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace baka
 {
@@ -24,7 +25,7 @@ namespace baka
         public static AmazonS3Config S3Config { get; set; }
 
         public static AmazonS3Client S3Client { get; set; }
-        
+
         public static TransferUtility S3Utility { get; set; }
 
         public static void Initliaze()
@@ -39,6 +40,40 @@ namespace baka
 
             S3Utility = new TransferUtility(S3Client);
 
+            InitliazeDb();
+        }
+
+        private static async void InitliazeDb()
+        {
+            using (var context = new BakaContext())
+            {
+                await context.Database.EnsureCreatedAsync();
+
+                var root_user = await context.Users.FirstOrDefaultAsync(x => x.Token == Config.RootToken);
+
+                if (root_user != null) return;
+
+                root_user = new BakaUser()
+                {
+                    Name = "ROOT_USER",
+                    Username = "ROOT_USER",
+                    InitialIp = "ROOT_USER",
+                    UploadLimitMB = 500,
+                    Deleted = false,
+                    Disabled = false,
+                    Timestamp = DateTime.Now,
+                    Email = "ROOT_USER_DO_NOT_USE_FOR_UPLOADING_OBJECTS",
+                    Token = Config.RootToken
+                };
+
+                root_user.Permissions.Add("SU_MANAGE_ACCOUNTS");
+                root_user.Permissions.Add("SU_VIEW_USER_INFO");
+                root_user.Permissions.Add("SU_UPLOAD_OBJECTS");
+
+                await context.Users.AddAsync(root_user);
+
+                await context.SaveChangesAsync();
+            }
         }
 
         public static async Task<bool> UploadFile(Stream stream, string FileId, string ContentType)
