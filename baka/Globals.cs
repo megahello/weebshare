@@ -5,16 +5,20 @@ using Amazon.S3.Model;
 using System.Threading.Tasks;
 using System.IO;
 using Amazon.S3.Transfer;
+using Jose;
+using baka.Models.Entity;
+using System.Linq;
 
 namespace baka
 {
     public static class Globals
     {
         public const string ConfigFileName = "baka_config.json";
+        public const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        public static Random Random = new Random();
         public static ConfigModel Config { get; set; }
         public static AmazonS3Config S3Config { get; set; }
         public static AmazonS3Client S3Client { get; set; }
-
         public static TransferUtility S3Utility { get; set; }
 
         public static void Initliaze()
@@ -88,14 +92,35 @@ namespace baka
             }
         }
 
-        public static string GenerateToken()
+        public static string GenerateToken(BakaUser user)
         {
-            throw new NotImplementedException();
+            var payload = new
+            {
+                username = user.Name,
+                email = user.Email,
+                id = user.Id,
+                timestamp = DateTime.Now.ToFileTimeUtc().ToString()
+            };
+
+            string token = JWT.Encode(payload, Config.JWTKey, JweAlgorithm.A256KW, JweEncryption.A256CBC_HS512);
+
+            return token;
         }
 
         public static string GenerateFileId()
         {
-            throw new NotImplementedException();
+            return new string(Enumerable.Repeat(chars, Config.IdLength)
+              .Select(s => s[Random.Next(s.Length)]).ToArray());
+        }
+
+        public static double ConvertBytesToMegabytes(long bytes)
+        {
+            return (bytes / 1024f) / 1024f;
+        }
+
+        public static double ConvertKilobytesToMegabytes(long kilobytes)
+        {
+            return kilobytes / 1024f;
         }
     }
 }

@@ -6,6 +6,7 @@ namespace baka.Models
     public class AuthModel
     {
         public BakaUser User { get; set; }
+        
         public bool Authorized { get; set; }
     }
 }

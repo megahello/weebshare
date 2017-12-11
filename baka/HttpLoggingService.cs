@@ -18,6 +18,7 @@ namespace baka
 
         [J("http_request_log")]
         private List<BakaRequest> Requests = new List<BakaRequest>();
+
         [JsonIgnore]
         private int request_count { get; set; }
 
@@ -56,12 +57,16 @@ namespace baka
     {
         [J("url")]
         public string DisplayUrl { get; set; }
+
         [J("auth_header")]
         public string AuthHeader { get; set; }
+
         [J("remote_ip")]
         public string RemoteIp { get; set; }
+
         [J("method")]
         public string Method { get; set; }
+        
         [J("timestamp")]
         public string Timestamp { get; set; }
     }

@@ -54,6 +54,12 @@ namespace baka.Models
         [J("default_permissions")]
         public IEnumerable<string> DefaultPermissions { get; set; }
 
+        [J("jwt_secret_key")]
+        public string JWTKey { get; set; }
+
+        [J("id_length")]
+        public int IdLength { get; set; }
+
         public static ConfigModel GetConfig(string ConfigFileName)
         {
             return JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(ConfigFileName));
