@@ -16,45 +16,19 @@ namespace baka.Controllers
         [Route("upload")]
         public async Task<IActionResult> UploadFile([FromForm(Name = "file")] List<IFormFile> files)
         {
-            AuthModel model = Authorize();
-
-            if (model.Authorized == false && model.User != null)
-            {
-                if (model.User.Disabled)
-                {
-                    Response.StatusCode = 401;
-
-                    return Json(new
-                    {
-                        success = false,
-                        error = "Your account has been disabled.",
-                        code = 401
-                    });
-                }
-                else
-                {
-                    Response.StatusCode = 401;
-
-                    return Json(new
-                    {
-                        success = false,
-                        error = "Invalid token.",
-                        code = 401
-                    });
-                }
-            }
-            else if (model.User == null)
+            AuthModel model = Authorize(PERMISSION.SU_UPLOAD_OBJECTS);
+            if (!model.Authorized)
             {
                 Response.StatusCode = 401;
 
                 return Json(new
                 {
                     success = false,
-                    error = "Invalid token.",
+                    error = model.Reason,
                     code = 401
                 });
             }
-
+            
             IFormFile file;
             if (files == null || !files.Any() || files.FirstOrDefault() == null)
             {

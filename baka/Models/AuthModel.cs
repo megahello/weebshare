@@ -8,5 +8,7 @@ namespace baka.Models
         public BakaUser User { get; set; }
         
         public bool Authorized { get; set; }
+
+        public string Reason { get; set; }
     }
 }

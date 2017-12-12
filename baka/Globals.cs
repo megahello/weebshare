@@ -21,12 +21,6 @@ namespace baka
 
         public static Random Random { get; set; }
 
-        public static BakaPermission SU_MANAGE_ACCOUNTS { get; set; }
-
-        public static BakaPermission SU_VIEW_USER_INFO { get; set; }
-
-        public static BakaPermission SU_UPLOAD_OBJECTS { get; set; }
-
         public static ConfigModel Config { get; set; }
 
         public static AmazonS3Config S3Config { get; set; }
@@ -48,19 +42,6 @@ namespace baka
             S3Utility = new TransferUtility(S3Client);
 
             Random = new Random();
-
-            SU_MANAGE_ACCOUNTS = new BakaPermission()
-            {
-                Data = "SU_MANAGE_ACCOUNTS"
-            };
-            SU_VIEW_USER_INFO = new BakaPermission()
-            {
-                Data = "SU_VIEW_USER_INFO"
-            };
-            SU_UPLOAD_OBJECTS = new BakaPermission()
-            {
-                Data = "SU_UPLOAD_OBJECTS"
-            };
 
             InitliazeDb().GetAwaiter().GetResult();
         }
@@ -92,9 +73,10 @@ namespace baka
                     Token = Config.RootToken
                 };
 
-                root_user.Permissions.Add(SU_VIEW_USER_INFO);
-                root_user.Permissions.Add(SU_MANAGE_ACCOUNTS);
-                root_user.Permissions.Add(SU_UPLOAD_OBJECTS);
+                foreach (PERMISSION perm in Config.DefaultRootPermissions)
+                {
+                    root_user.Permissions.Add(perm);
+                }
 
                 await context.Users.AddAsync(root_user);
                 await context.SaveChangesAsync();

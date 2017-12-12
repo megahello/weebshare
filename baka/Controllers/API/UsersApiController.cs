@@ -18,40 +18,15 @@ namespace baka.Controllers
         {
             try
             {
-                var model = AuthorizeSu();
-                if (model.Authorized == false && model.User != null)
-                {
-                    if (model.User.Disabled)
-                    {
-                        Response.StatusCode = 401;
-
-                        return Json(new
-                        {
-                            success = false,
-                            error = "Your account has been disabled.",
-                            code = 401
-                        });
-                    }
-                    else
-                    {
-                        Response.StatusCode = 401;
-
-                        return Json(new
-                        {
-                            success = false,
-                            error = "Invalid token.",
-                            code = 401
-                        });
-                    }
-                }
-                else if (!model.Authorized && model.User == null)
+                AuthModel model = Authorize(PERMISSION.SU_CREATE_ACCOUNTS);
+                if (!model.Authorized)
                 {
                     Response.StatusCode = 401;
 
                     return Json(new
                     {
                         success = false,
-                        error = "Invalid token.",
+                        error = model.Reason,
                         code = 401
                     });
                 }
@@ -73,12 +48,9 @@ namespace baka.Controllers
 
                     if (Globals.Config.GiveDefaultPermissions)
                     {
-                        foreach (string permission in Globals.Config.DefaultPermissions)
+                        foreach (PERMISSION permission in Globals.Config.DefaultPermissions)
                         {
-                            usr.Permissions.Add(new BakaPermission()
-                            {
-                                Data = permission
-                            });
+                            usr.Permissions.Add(permission);
                         }
                     }
 
@@ -123,40 +95,15 @@ namespace baka.Controllers
         {
             try
             {
-                var model = AuthorizeInfo();
-                if (model.Authorized == false && model.User != null)
-                {
-                    if (model.User.Disabled)
-                    {
-                        Response.StatusCode = 401;
-
-                        return Json(new
-                        {
-                            success = false,
-                            error = "Your account has been disabled.",
-                            code = 401
-                        });
-                    }
-                    else
-                    {
-                        Response.StatusCode = 401;
-
-                        return Json(new
-                        {
-                            success = false,
-                            error = "Invalid token.",
-                            code = 401
-                        });
-                    }
-                }
-                else if (model.User == null)
+                AuthModel model = Authorize(PERMISSION.SU_VIEW_PRIVATE_ACCOUNT_INFO);
+                if (!model.Authorized)
                 {
                     Response.StatusCode = 401;
 
                     return Json(new
                     {
                         success = false,
-                        error = "Invalid token.",
+                        error = model.Reason,
                         code = 401
                     });
                 }
@@ -180,7 +127,7 @@ namespace baka.Controllers
                         token = return_usr.Token,
                         deleted = return_usr.Deleted,
                         disabled = return_usr.Disabled,
-                        permissions = return_usr.PermissionsList,
+                        permissions = return_usr.Permissions,
                         links = return_usr.Links,
                         files = return_usr.Files,
                     });
@@ -206,44 +153,18 @@ namespace baka.Controllers
         {
             try
             {
-                var model = AuthorizeSu();
-                if (model.Authorized == false && model.User != null)
-                {
-                    if (model.User.Disabled)
-                    {
-                        Response.StatusCode = 401;
-
-                        return Json(new
-                        {
-                            success = false,
-                            error = "Your account has been disabled.",
-                            code = 401
-                        });
-                    }
-                    else
-                    {
-                        Response.StatusCode = 401;
-
-                        return Json(new
-                        {
-                            success = false,
-                            error = "Invalid token.",
-                            code = 401
-                        });
-                    }
-                }
-                else if (model.User == null)
+                AuthModel model = Authorize(PERMISSION.SU_DELETE_ACCOUNTS);
+                if (!model.Authorized)
                 {
                     Response.StatusCode = 401;
 
                     return Json(new
                     {
                         success = false,
-                        error = "Invalid token.",
+                        error = model.Reason,
                         code = 401
                     });
                 }
-
                 using (var context = new BakaContext())
                 {
                     BakaUser return_usr = await context.Users.FirstOrDefaultAsync(x => x.Token == token);
@@ -252,7 +173,7 @@ namespace baka.Controllers
                         return NotFound(new { success = false, error = "404 Not Found", code = 404 });
 
                     if (!Globals.Config.PreserveDeletedFiles)
-                        context.Remove(return_usr);
+                        context.Users.Remove(return_usr);
                     else
                         return_usr.Deleted = true;
 
@@ -287,40 +208,15 @@ namespace baka.Controllers
         {
             try
             {
-                var model = AuthorizeSu();
-                if (model.Authorized == false && model.User != null)
-                {
-                    if (model.User.Disabled)
-                    {
-                        Response.StatusCode = 401;
-
-                        return Json(new
-                        {
-                            success = false,
-                            error = "Your account has been disabled.",
-                            code = 401
-                        });
-                    }
-                    else
-                    {
-                        Response.StatusCode = 401;
-
-                        return Json(new
-                        {
-                            success = false,
-                            error = "Invalid token.",
-                            code = 401
-                        });
-                    }
-                }
-                else if (model.User == null)
+                AuthModel model = Authorize(PERMISSION.SU_DISABLE_ACCOUNTS);
+                if (!model.Authorized)
                 {
                     Response.StatusCode = 401;
 
                     return Json(new
                     {
                         success = false,
-                        error = "Invalid token.",
+                        error = model.Reason,
                         code = 401
                     });
                 }
@@ -362,40 +258,15 @@ namespace baka.Controllers
         {
             try
             {
-                var model = AuthorizeSu();
-                if (model.Authorized == false && model.User != null)
-                {
-                    if (model.User.Disabled)
-                    {
-                        Response.StatusCode = 401;
-
-                        return Json(new
-                        {
-                            success = false,
-                            error = "Your account has been disabled.",
-                            code = 401
-                        });
-                    }
-                    else
-                    {
-                        Response.StatusCode = 401;
-
-                        return Json(new
-                        {
-                            success = false,
-                            error = "Invalid token.",
-                            code = 401
-                        });
-                    }
-                }
-                else if (model.User == null)
+                AuthModel model = Authorize(PERMISSION.SU_RESET_TOKEN);
+                if (!model.Authorized)
                 {
                     Response.StatusCode = 401;
 
                     return Json(new
                     {
                         success = false,
-                        error = "Invalid token.",
+                        error = model.Reason,
                         code = 401
                     });
                 }

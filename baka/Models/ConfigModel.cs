@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Amazon;
+using baka.Models.Entity;
 using Newtonsoft.Json;
 using J = Newtonsoft.Json.JsonPropertyAttribute;
 
@@ -52,13 +53,16 @@ namespace baka.Models
         public bool GiveDefaultPermissions { get; set; }
 
         [J("default_permissions")]
-        public IEnumerable<string> DefaultPermissions { get; set; }
+        public IEnumerable<PERMISSION> DefaultPermissions { get; set; }
 
         [J("jwt_secret_key")]
         public string JWTKey { get; set; }
 
         [J("id_length")]
         public int IdLength { get; set; }
+
+        [J("default_root_permissions")]
+        public IEnumerable<PERMISSION> DefaultRootPermissions { get; internal set; }
 
         public static ConfigModel GetConfig(string ConfigFileName)
         {

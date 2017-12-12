@@ -11,11 +11,12 @@ namespace baka.Controllers
     public class BakaController : Controller
     {
         [NonAction]
-        internal AuthModel Authorize()
+        internal AuthModel Authorize(PERMISSION requiredPermission)
         {
             AuthModel model = new AuthModel();
 
             var token = Request.Headers["baka_token"].FirstOrDefault();
+
             if (string.IsNullOrWhiteSpace(token))
                 return NullModel();
 
@@ -25,70 +26,19 @@ namespace baka.Controllers
                 if (usr == null)
                     return NullModel();
 
-                if (usr.Disabled || usr.Deleted)
-                    model.Authorized = false;
-                else if (!usr.Permissions.Contains(Globals.SU_MANAGE_ACCOUNTS))
+                if (usr.Disabled)
                 {
                     model.Authorized = false;
+                    model.Reason = "Your account has been disabled";
                 }
-                else model.Authorized = true;
-
-                model.User = usr;
-
-                return model;
-            }
-        }
-
-        [NonAction]
-        internal AuthModel AuthorizeInfo()
-        {
-            AuthModel model = new AuthModel();
-
-            var token = Request.Headers["baka_token"].FirstOrDefault();
-            if (string.IsNullOrWhiteSpace(token))
-                return NullModel();
-
-            using (var context = new BakaContext())
-            {
-                var usr = context.Users.FirstOrDefault(u => u.Token == token);
-                if (usr == null)
-                    return NullModel();
-
-                if (usr.Disabled || usr.Deleted)
-                    model.Authorized = false;
-                else if (!usr.Permissions.Contains(Globals.SU_MANAGE_ACCOUNTS))
+                else if(usr.Deleted)
                 {
-                    model.Authorized = false;
+                    model.Reason = "Invalid token";
                 }
-                else model.Authorized = true;
-
-                model.User = usr;
-
-                return model;
-            }
-        }
-
-        [NonAction]
-        internal AuthModel AuthorizeSu()
-        {
-            AuthModel model = new AuthModel();
-
-            var token = Request.Headers["baka_token"].FirstOrDefault();
-
-            if (string.IsNullOrWhiteSpace(token))
-                return NullModel();
-
-            using (var context = new BakaContext())
-            {
-                var usr = context.Users.FirstOrDefault(u => u.Token == token);
-                if (usr == null)
-                    return NullModel();
-
-                if (usr.Disabled || usr.Deleted)
-                    model.Authorized = false;
-                else if (!usr.Permissions.Contains(Globals.SU_MANAGE_ACCOUNTS))
+                else if (!usr.Permissions.Contains(requiredPermission))
                 {
                     model.Authorized = false;
+                    model.Reason = "Missing permissions";
                 }
                 else model.Authorized = true;
 
@@ -101,7 +51,7 @@ namespace baka.Controllers
         [NonAction]
         private AuthModel NullModel()
         {
-            return new AuthModel() { Authorized = false, User = null, };
+            return new AuthModel() { Authorized = false, User = null, Reason = "Invalid token" };
         }
 
         [NonAction]

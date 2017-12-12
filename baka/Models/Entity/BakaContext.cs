@@ -28,7 +28,7 @@ namespace baka.Models.Entity
         {
             Files = new HashSet<BakaFile>();
             Links = new HashSet<BakaLink>();
-            Permissions = new HashSet<BakaPermission>();
+            Permissions = new HashSet<PERMISSION>();
         }
 
         public string Name { get; set; }
@@ -41,7 +41,7 @@ namespace baka.Models.Entity
 
         public ICollection<BakaLink> Links { get; set; }
 
-        public ICollection<BakaPermission> Permissions { get; set; }
+        public ICollection<PERMISSION> Permissions { get; set; }
 
         public DateTime Timestamp { get; set; }
 
@@ -62,7 +62,7 @@ namespace baka.Models.Entity
     {   
         SU_UPLOAD_OBJECTS = 0,
         SU_UPLOAD_LINKS = 1,
-        SU_VIEW_ACCOUNT_INFO = 2,
+        SU_RESET_TOKEN = 2,
         SU_VIEW_PRIVATE_ACCOUNT_INFO = 3,
         SU_CREATE_ACCOUNTS = 4,
         SU_DISABLE_ACCOUNTS = 5,
