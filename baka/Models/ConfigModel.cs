@@ -49,20 +49,11 @@ namespace baka.Models
         [J("preserve_deleted_files")]
         public bool PreserveDeletedFiles { get; set; }
 
-        [J("give_default_permissions")]
-        public bool GiveDefaultPermissions { get; set; }
-
-        [J("default_permissions")]
-        public IEnumerable<PERMISSION> DefaultPermissions { get; set; }
-
         [J("jwt_secret_key")]
         public string JWTKey { get; set; }
 
         [J("id_length")]
         public int IdLength { get; set; }
-
-        [J("default_root_permissions")]
-        public IEnumerable<PERMISSION> DefaultRootPermissions { get; internal set; }
 
         public static ConfigModel GetConfig(string ConfigFileName)
         {

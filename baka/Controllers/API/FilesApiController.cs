@@ -16,7 +16,7 @@ namespace baka.Controllers
         [Route("upload")]
         public async Task<IActionResult> UploadFile([FromForm(Name = "file")] List<IFormFile> files)
         {
-            AuthModel model = Authorize(PERMISSION.SU_UPLOAD_OBJECTS);
+            AuthModel model = Authorize("su_upload");
             if (!model.Authorized)
             {
                 Response.StatusCode = 401;
@@ -28,7 +28,7 @@ namespace baka.Controllers
                     code = 401
                 });
             }
-            
+
             IFormFile file;
             if (files == null || !files.Any() || files.FirstOrDefault() == null)
             {

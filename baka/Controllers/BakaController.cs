@@ -11,7 +11,7 @@ namespace baka.Controllers
     public class BakaController : Controller
     {
         [NonAction]
-        internal AuthModel Authorize(PERMISSION requiredPermission)
+        internal AuthModel Authorize(string type)
         {
             AuthModel model = new AuthModel();
 
@@ -35,7 +35,7 @@ namespace baka.Controllers
                 {
                     model.Reason = "Invalid token";
                 }
-                else if (!usr.Permissions.Contains(requiredPermission))
+                else if (usr.AccountType != type)
                 {
                     model.Authorized = false;
                     model.Reason = "Missing permissions";

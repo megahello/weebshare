@@ -70,13 +70,9 @@ namespace baka
                     Disabled = false,
                     Timestamp = DateTime.Now,
                     Email = "ROOT_USER_DO_NOT_USE_FOR_UPLOADING_OBJECTS",
-                    Token = Config.RootToken
+                    Token = Config.RootToken,
+                    AccountType = "su_full"
                 };
-
-                foreach (PERMISSION perm in Config.DefaultRootPermissions)
-                {
-                    root_user.Permissions.Add(perm);
-                }
 
                 await context.Users.AddAsync(root_user);
                 await context.SaveChangesAsync();

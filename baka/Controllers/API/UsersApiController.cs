@@ -18,7 +18,7 @@ namespace baka.Controllers
         {
             try
             {
-                AuthModel model = Authorize(PERMISSION.SU_CREATE_ACCOUNTS);
+                AuthModel model = Authorize("su_full");
                 if (!model.Authorized)
                 {
                     Response.StatusCode = 401;
@@ -43,16 +43,9 @@ namespace baka.Controllers
                         Timestamp = DateTime.Now,
                         UploadLimitMB = details.UploadLimit,
                         Deleted = false,
-                        Disabled = false
+                        Disabled = false,
+                        AccountType = "su_upload"
                     };
-
-                    if (Globals.Config.GiveDefaultPermissions)
-                    {
-                        foreach (PERMISSION permission in Globals.Config.DefaultPermissions)
-                        {
-                            usr.Permissions.Add(permission);
-                        }
-                    }
 
                     usr.Token = Globals.GenerateToken(usr);
 
@@ -95,7 +88,7 @@ namespace baka.Controllers
         {
             try
             {
-                AuthModel model = Authorize(PERMISSION.SU_VIEW_PRIVATE_ACCOUNT_INFO);
+                AuthModel model = Authorize("su_full");
                 if (!model.Authorized)
                 {
                     Response.StatusCode = 401;
@@ -127,7 +120,7 @@ namespace baka.Controllers
                         token = return_usr.Token,
                         deleted = return_usr.Deleted,
                         disabled = return_usr.Disabled,
-                        permissions = return_usr.Permissions,
+                        account_type = return_usr.AccountType,
                         links = return_usr.Links,
                         files = return_usr.Files,
                     });
@@ -153,7 +146,7 @@ namespace baka.Controllers
         {
             try
             {
-                AuthModel model = Authorize(PERMISSION.SU_DELETE_ACCOUNTS);
+                AuthModel model = Authorize("su_full");
                 if (!model.Authorized)
                 {
                     Response.StatusCode = 401;
@@ -208,7 +201,7 @@ namespace baka.Controllers
         {
             try
             {
-                AuthModel model = Authorize(PERMISSION.SU_DISABLE_ACCOUNTS);
+                AuthModel model = Authorize("su_full");
                 if (!model.Authorized)
                 {
                     Response.StatusCode = 401;
@@ -258,7 +251,7 @@ namespace baka.Controllers
         {
             try
             {
-                AuthModel model = Authorize(PERMISSION.SU_RESET_TOKEN);
+                AuthModel model = Authorize("su_full");
                 if (!model.Authorized)
                 {
                     Response.StatusCode = 401;
