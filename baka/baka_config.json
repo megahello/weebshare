@@ -13,7 +13,7 @@
     "s3_key_prefix": "files/",
     "s3_set_public_read": true,
     "give_default_permissions": true,
-    "default_permissions": [0, 1],
+    "default_permissions": [0, 1, 2, 9, 10],
     "jwt_secret_key": "my_key",
     "id_length": 5
 }

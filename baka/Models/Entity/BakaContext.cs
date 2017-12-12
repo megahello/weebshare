@@ -16,8 +16,6 @@ namespace baka.Models.Entity
 
         public DbSet<BakaLink> Links { get; set; }
 
-        public DbSet<BakaPermission> Permissions { get; set; }
-
         protected override void OnConfiguring(DbContextOptionsBuilder OptionsBuilder)
         {
             OptionsBuilder.UseSqlite($"Data Source = {Globals.Config.DbName}");
@@ -58,30 +56,21 @@ namespace baka.Models.Entity
         public bool Deleted { get; set; }
 
         public bool Disabled { get; set; }
-
-        [NotMapped]
-        public ICollection<string> PermissionsList
-        {
-            get
-            {
-                var list = new HashSet<string>();
-                foreach (BakaPermission perm in Permissions)
-                {
-                    list.Add(perm.Data);
-                }
-
-                return list;
-            }
-        }
     }
 
-    public class BakaPermission
+    public enum PERMISSION
     {   
-        [JsonIgnore]
-        public BakaUser User { get; set; }
-        
-        [Key]
-        public string Data { get; set; }
+        SU_UPLOAD_OBJECTS = 0,
+        SU_UPLOAD_LINKS = 1,
+        SU_VIEW_ACCOUNT_INFO = 2,
+        SU_VIEW_PRIVATE_ACCOUNT_INFO = 3,
+        SU_CREATE_ACCOUNTS = 4,
+        SU_DISABLE_ACCOUNTS = 5,
+        SU_DELETE_ACCOUNTS = 6,
+        SU_DELETE_OBJECTS = 7,
+        SU_DELETE_LINKS = 8,
+        SU_DELETE_SELF_OBJECTS = 9,
+        SU_DELETE_SELF_LINKS = 10
     }
 
     public class BakaFile
