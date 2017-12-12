@@ -44,7 +44,7 @@ namespace baka.Controllers
                         });
                     }
                 }
-                else if (model.User == null)
+                else if (!model.Authorized && model.User == null)
                 {
                     Response.StatusCode = 401;
 
@@ -75,7 +75,10 @@ namespace baka.Controllers
                     {
                         foreach (string permission in Globals.Config.DefaultPermissions)
                         {
-                            usr.Permissions.Add(permission);
+                            usr.Permissions.Add(new BakaPermission()
+                            {
+                                Data = permission
+                            });
                         }
                     }
 
@@ -177,7 +180,7 @@ namespace baka.Controllers
                         token = return_usr.Token,
                         deleted = return_usr.Deleted,
                         disabled = return_usr.Disabled,
-                        permissions = return_usr.Permissions,
+                        permissions = return_usr.PermissionsList,
                         links = return_usr.Links,
                         files = return_usr.Files,
                     });

@@ -9,6 +9,7 @@ using Jose;
 using baka.Models.Entity;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace baka
 {
@@ -18,7 +19,13 @@ namespace baka
 
         public const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-        public static Random Random = new Random();
+        public static Random Random { get; set; }
+
+        public static BakaPermission SU_MANAGE_ACCOUNTS { get; set; }
+
+        public static BakaPermission SU_VIEW_USER_INFO { get; set; }
+
+        public static BakaPermission SU_UPLOAD_OBJECTS { get; set; }
 
         public static ConfigModel Config { get; set; }
 
@@ -40,10 +47,25 @@ namespace baka
 
             S3Utility = new TransferUtility(S3Client);
 
-            InitliazeDb();
+            Random = new Random();
+
+            SU_MANAGE_ACCOUNTS = new BakaPermission()
+            {
+                Data = "SU_MANAGE_ACCOUNTS"
+            };
+            SU_VIEW_USER_INFO = new BakaPermission()
+            {
+                Data = "SU_VIEW_USER_INFO"
+            };
+            SU_UPLOAD_OBJECTS = new BakaPermission()
+            {
+                Data = "SU_UPLOAD_OBJECTS"
+            };
+
+            InitliazeDb().GetAwaiter().GetResult();
         }
 
-        private static async void InitliazeDb()
+        private static async Task InitliazeDb()
         {
             using (var context = new BakaContext())
             {
@@ -51,7 +73,11 @@ namespace baka
 
                 var root_user = await context.Users.FirstOrDefaultAsync(x => x.Token == Config.RootToken);
 
-                if (root_user != null) return;
+                if (root_user != null)
+                {
+                    Console.WriteLine("Root user already exists!\n" + JsonConvert.SerializeObject(root_user));
+                    return;
+                }
 
                 root_user = new BakaUser()
                 {
@@ -66,13 +92,14 @@ namespace baka
                     Token = Config.RootToken
                 };
 
-                root_user.Permissions.Add("SU_MANAGE_ACCOUNTS");
-                root_user.Permissions.Add("SU_VIEW_USER_INFO");
-                root_user.Permissions.Add("SU_UPLOAD_OBJECTS");
+                root_user.Permissions.Add(SU_VIEW_USER_INFO);
+                root_user.Permissions.Add(SU_MANAGE_ACCOUNTS);
+                root_user.Permissions.Add(SU_UPLOAD_OBJECTS);
 
                 await context.Users.AddAsync(root_user);
-
                 await context.SaveChangesAsync();
+
+                Console.WriteLine("Created root user!\n" + JsonConvert.SerializeObject(root_user));
             }
         }
 

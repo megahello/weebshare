@@ -6,10 +6,14 @@
     "log_interval": 500,
     "log_path": "RequestLogs/",
     "log_requests_to_console": true,
-    "s3_access_key": "",
-    "s3_secret_key": "",
+    "s3_access_key": "key",
+    "s3_secret_key": "secret",
     "s3_service_url": "https://ams3.digitaloceanspaces.com",
-    "s3_bucket_name": "baka-main",
+    "s3_bucket_name": "bucket-name",
     "s3_key_prefix": "files/",
-    "s3_set_public_read": true
+    "s3_set_public_read": true,
+    "give_default_permissions": true,
+    "default_permissions": ["SU_UPLOAD_OBJECTS"],
+    "jwt_secret_key": "my_key",
+    "id_length": 5
 }

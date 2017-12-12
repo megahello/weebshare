@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace baka.Models.Entity
 {
@@ -12,6 +15,8 @@ namespace baka.Models.Entity
         public DbSet<BakaFile> Files { get; set; }
 
         public DbSet<BakaLink> Links { get; set; }
+
+        public DbSet<BakaPermission> Permissions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder OptionsBuilder)
         {
@@ -25,7 +30,7 @@ namespace baka.Models.Entity
         {
             Files = new HashSet<BakaFile>();
             Links = new HashSet<BakaLink>();
-            Permissions = new HashSet<string>();
+            Permissions = new HashSet<BakaPermission>();
         }
 
         public string Name { get; set; }
@@ -38,7 +43,7 @@ namespace baka.Models.Entity
 
         public ICollection<BakaLink> Links { get; set; }
 
-        public ICollection<string> Permissions { get; set; }
+        public ICollection<BakaPermission> Permissions { get; set; }
 
         public DateTime Timestamp { get; set; }
 
@@ -54,6 +59,29 @@ namespace baka.Models.Entity
 
         public bool Disabled { get; set; }
 
+        [NotMapped]
+        public ICollection<string> PermissionsList
+        {
+            get
+            {
+                var list = new HashSet<string>();
+                foreach (BakaPermission perm in Permissions)
+                {
+                    list.Add(perm.Data);
+                }
+
+                return list;
+            }
+        }
+    }
+
+    public class BakaPermission
+    {   
+        [JsonIgnore]
+        public BakaUser User { get; set; }
+        
+        [Key]
+        public string Data { get; set; }
     }
 
     public class BakaFile
@@ -78,6 +106,7 @@ namespace baka.Models.Entity
 
         public double FileSizeMB { get; set; }
 
+        [NotMapped]
         public string ContentType
         {
             get
@@ -85,8 +114,6 @@ namespace baka.Models.Entity
                 return BakaMime.GetMimeType(Extension);
             }
         }
-
-
     }
 
     public class BakaLink

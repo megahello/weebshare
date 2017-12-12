@@ -8,7 +8,6 @@ using System.Collections.Generic;
 
 namespace baka.Controllers
 {
-    [NonController]
     public class BakaController : Controller
     {
         [NonAction]
@@ -28,7 +27,7 @@ namespace baka.Controllers
 
                 if (usr.Disabled || usr.Deleted)
                     model.Authorized = false;
-                else if (!usr.Permissions.Contains("SU_UPLOAD_OBJECTS"))
+                else if (!usr.Permissions.Contains(Globals.SU_MANAGE_ACCOUNTS))
                 {
                     model.Authorized = false;
                 }
@@ -57,7 +56,7 @@ namespace baka.Controllers
 
                 if (usr.Disabled || usr.Deleted)
                     model.Authorized = false;
-                else if (!usr.Permissions.Contains("SU_VIEW_USER_INFO"))
+                else if (!usr.Permissions.Contains(Globals.SU_MANAGE_ACCOUNTS))
                 {
                     model.Authorized = false;
                 }
@@ -75,6 +74,7 @@ namespace baka.Controllers
             AuthModel model = new AuthModel();
 
             var token = Request.Headers["baka_token"].FirstOrDefault();
+
             if (string.IsNullOrWhiteSpace(token))
                 return NullModel();
 
@@ -86,7 +86,7 @@ namespace baka.Controllers
 
                 if (usr.Disabled || usr.Deleted)
                     model.Authorized = false;
-                else if (!usr.Permissions.Contains("SU_MANAGE_ACCOUNTS"))
+                else if (!usr.Permissions.Contains(Globals.SU_MANAGE_ACCOUNTS))
                 {
                     model.Authorized = false;
                 }

@@ -12,10 +12,10 @@ namespace baka.Controllers
 {
     public class MainController : BakaController
     {
-        [Route("/{*url}/{name}/.{ext?}/")]
-        [Route("/{*url}/{name}/.{ext?}")]
-        [Route("/{*url}/{name}/")]
-        [Route("/{*url}/{name}")]
+        [Route("/{url}/{name}/.{ext?}/")]
+        [Route("/{url}/{name}/.{ext?}")]
+        [Route("/{url}/{name}/")]
+        [Route("/{url}/{name}")]
         [Route("/{name}/.{ext?}/")]
         [Route("/{name}/.{ext?}")]
         [Route("/{name}/")]
