@@ -10,6 +10,7 @@ using baka.Models.Entity;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace baka
 {
@@ -98,8 +99,10 @@ namespace baka
 
                 return true;
             }
-            catch
+            catch(Exception e)
             {
+                if(Globals.Config.IsDebug)
+                    Console.WriteLine("[S3] " + e.ToString());
                 return false;
             }
         }
@@ -114,8 +117,11 @@ namespace baka
 
                 return await S3Utility.OpenStreamAsync(request);
             }
-            catch
+            catch(Exception e)
             {
+                if(Globals.Config.IsDebug)
+                    Console.WriteLine("[S3] " + e.ToString());
+                    
                 return null;
             }
         }
@@ -132,8 +138,11 @@ namespace baka
 
                 return true;
             }
-            catch
+            catch(Exception e)
             {
+                if(Globals.Config.IsDebug)
+                    Console.WriteLine("[S3] " + e.ToString());
+
                 return false;
             }
         }
@@ -142,13 +151,12 @@ namespace baka
         {
             var payload = new
             {
-                username = user.Name,
-                email = user.Email,
-                id = user.Id,
-                timestamp = DateTime.Now.ToFileTimeUtc().ToString()
+                ts = DateTime.Now.ToFileTimeUtc().ToString()
             };
 
-            string token = JWT.Encode(payload, Config.JWTKey, JweAlgorithm.A256KW, JweEncryption.A256CBC_HS512);
+            byte[] key = Encoding.UTF8.GetBytes(Config.JWTKey);
+
+            string token = JWT.Encode(payload, key, JwsAlgorithm.HS256);
 
             return token;
         }

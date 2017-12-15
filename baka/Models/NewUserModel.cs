@@ -7,6 +7,9 @@ namespace baka.Models
         [J("username")]
         public string Username { get; set; }
 
+        [J("email")]
+        public string Email { get; set; }
+
         [J("full_name")]
         public string Name { get; set; }
 

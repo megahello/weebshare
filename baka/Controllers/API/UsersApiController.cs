@@ -14,7 +14,7 @@ namespace baka.Controllers
     {
         [Route("create-user")]
         [AcceptVerbs("POST")]
-        public async Task<IActionResult> CreateUser(NewUserModel details)
+        public async Task<IActionResult> CreateUser([FromBody] NewUserModel details)
         {
             try
             {
@@ -39,6 +39,7 @@ namespace baka.Controllers
                     {
                         Name = details.Name,
                         Username = details.Username,
+                        Email = details.Email,
                         InitialIp = null,
                         Timestamp = DateTime.Now,
                         UploadLimitMB = details.UploadLimit,
@@ -69,15 +70,24 @@ namespace baka.Controllers
                     upload_limit = return_usr.UploadLimitMB,
                 });
             }
-            catch
+            catch(Exception e)
             {
                 Response.StatusCode = 500;
+
+                if (!Globals.Config.IsDebug)
+                    return Json(new
+                    {
+                        success = false,
+                        error = "500 Internal Server Error",
+                        code = 500
+                    });
 
                 return Json(new
                 {
                     success = false,
                     error = "500 Internal Server Error",
-                    code = 500
+                    code = 500,
+                    exception = e.ToString(),
                 });
             }
         }

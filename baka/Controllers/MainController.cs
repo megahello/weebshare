@@ -12,14 +12,10 @@ namespace baka.Controllers
 {
     public class MainController : BakaController
     {
-        [Route("/{url}/{name}/.{ext?}/")]
         [Route("/{url}/{name}/.{ext?}")]
-        [Route("/{url}/{name}/")]
         [Route("/{url}/{name}")]
-        [Route("/{name}/.{ext?}/")]
         [Route("/{name}/.{ext?}")]
         [Route("/{name}/")]
-        [Route("/{name}")]
         [AcceptVerbs("GET")]
         public async Task<IActionResult> GetFileOrLink(string name, string ext, string url)
         {
@@ -50,7 +46,7 @@ namespace baka.Controllers
                 if (use_url_extention == "1" || use_url_extention == "true")
                     file_ext = ext;
 
-                return File(await Globals.GetFile(file.ExternalId), BakaMime.GetMimeType(file_ext));
+                return File(await Globals.GetFile(file.BackendFileId), BakaMime.GetMimeType(file_ext));
             }
         }
 

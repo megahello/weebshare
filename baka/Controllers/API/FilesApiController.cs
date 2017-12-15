@@ -76,19 +76,18 @@ namespace baka.Controllers
                 Deleted = false,
                 ExternalId = Globals.GenerateFileId(),
                 BackendFileId = Globals.Config.S3KeyPrefix + Globals.GenerateBackendId() + extension,
-                Uploader = model.User,
                 Timestamp = DateTime.Now,
                 Extension = extension,
                 IpUploadedFrom = GetIp()
             };
 
-            await Globals.UploadFile(file.OpenReadStream(), db_file.Extension, db_file.ContentType);
+            await Globals.UploadFile(file.OpenReadStream(), db_file.BackendFileId, db_file.ContentType);
 
             using (var context = new BakaContext())
             {
-                await context.Files.AddAsync(db_file);
-
                 model.User.Files.Add(db_file);
+
+                await context.Files.AddAsync(db_file);
 
                 if (model.User.InitialIp == null)
                 {
