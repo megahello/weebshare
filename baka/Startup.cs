@@ -43,9 +43,9 @@ namespace baka
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
             app.UseDefaultFiles();
-            
+            app.UseStaticFiles();
+
             app.Use(async (context, next) =>
             {
                 await next();
