@@ -20,6 +20,7 @@ namespace baka
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseUrls(Globals.Config.Urls)
                 .UseStartup<Startup>()
                 .Build();
     }

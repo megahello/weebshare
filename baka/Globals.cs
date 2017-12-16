@@ -99,9 +99,9 @@ namespace baka
 
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                if(Globals.Config.IsDebug)
+                if (Globals.Config.IsDebug)
                     Console.WriteLine("[S3] " + e.ToString());
                 return false;
             }
@@ -117,11 +117,11 @@ namespace baka
 
                 return await S3Utility.OpenStreamAsync(request);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                if(Globals.Config.IsDebug)
+                if (Globals.Config.IsDebug)
                     Console.WriteLine("[S3] " + e.ToString());
-                    
+
                 return null;
             }
         }
@@ -138,9 +138,9 @@ namespace baka
 
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                if(Globals.Config.IsDebug)
+                if (Globals.Config.IsDebug)
                     Console.WriteLine("[S3] " + e.ToString());
 
                 return false;
@@ -175,7 +175,12 @@ namespace baka
 
         public static double ConvertBytesToMegabytes(long bytes)
         {
-            return (bytes / 1024f) / 1024f;
+            return (bytes / 1024d) / 1024d;
+        }
+
+        public static double ConvertMegabytesToBytes(long mb)
+        {
+            return (mb * 1024d) * 1024d;
         }
 
         public static double ConvertKilobytesToMegabytes(long kilobytes)

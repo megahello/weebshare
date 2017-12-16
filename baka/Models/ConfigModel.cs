@@ -55,6 +55,9 @@ namespace baka.Models
         [J("id_length")]
         public int IdLength { get; set; }
 
+        [J("urls")]
+        public string Urls { get; internal set; }
+
         public static ConfigModel GetConfig(string ConfigFileName)
         {
             return JsonConvert.DeserializeObject<ConfigModel>(File.ReadAllText(ConfigFileName));

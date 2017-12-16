@@ -14,6 +14,7 @@ namespace baka.Controllers
     public class FilesApiController : BakaController
     {
         [Route("upload")]
+        [RequestSizeLimit(((1000 * 1024L) * 1024L))]
         public async Task<IActionResult> UploadFile([FromForm(Name = "file")] List<IFormFile> files)
         {
             AuthModel model = Authorize("su_upload");
@@ -49,7 +50,7 @@ namespace baka.Controllers
 
             if (FileSize > model.User.UploadLimitMB)
             {
-                Response.StatusCode = 500;
+                Response.StatusCode = 400;
 
                 return Json(new
                 {

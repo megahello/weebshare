@@ -13,5 +13,6 @@
     "s3_key_prefix": "files/",
     "s3_set_public_read": true,
     "jwt_secret_key": "mTuQqhGS9TUN2QkOXQFIFaFEwFEnDoOb",
-    "id_length": 5
+    "id_length": 5,
+    "urls":"http://localhost:5000"
 }
