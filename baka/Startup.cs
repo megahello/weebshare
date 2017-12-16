@@ -44,7 +44,8 @@ namespace baka
             }
 
             app.UseStaticFiles();
-
+            app.UseDefaultFiles();
+            
             app.Use(async (context, next) =>
             {
                 await next();

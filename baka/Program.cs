@@ -22,6 +22,7 @@ namespace baka
             WebHost.CreateDefaultBuilder(args)
                 .UseUrls(Globals.Config.Urls)
                 .UseStartup<Startup>()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .Build();
     }
 }
